@@ -12,6 +12,22 @@ Please check the releases page for the latest feature list.
 
 Configuration files for HID to VPAD can be found [here](https://github.com/Maschell/controller_patcher_configs).
 
+## Running the Application
+
+### GUI Mode (Default)
+Simply run the JAR file:
+```bash
+java -jar HIDToVPADNetworkClient.jar
+```
+
+### TUI Mode (Text User Interface / No GUI)
+For headless systems, SSH sessions, or if you prefer a command-line interface:
+```bash
+java -jar HIDToVPADNetworkClient.jar --tui
+```
+
+See [TUI_USAGE.md](TUI_USAGE.md) for detailed information about using the text-based interface.
+
 ## Used Libraries
 Lombok - https://projectlombok.org/index.html  
 purejavahidapi - https://github.com/nyholku/purejavahidapi  

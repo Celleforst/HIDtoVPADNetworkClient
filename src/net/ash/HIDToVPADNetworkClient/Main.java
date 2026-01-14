@@ -24,6 +24,7 @@ package net.ash.HIDToVPADNetworkClient;
 import javax.swing.SwingUtilities;
 
 import net.ash.HIDToVPADNetworkClient.gui.GuiMain;
+import net.ash.HIDToVPADNetworkClient.tui.TuiMain;
 import net.ash.HIDToVPADNetworkClient.manager.ActiveControllerManager;
 import net.ash.HIDToVPADNetworkClient.network.NetworkManager;
 import net.ash.HIDToVPADNetworkClient.util.MessageBoxManager;
@@ -34,7 +35,20 @@ import net.ash.HIDToVPADNetworkClient.util.Settings;
  * TODO locale
  */
 public final class Main {
+    private static boolean tuiMode = false;
+    
     public static void main(String[] args) {
+        // Check for TUI mode argument
+        for (String arg : args) {
+            if ("--tui".equals(arg) || "--no-gui".equals(arg) || "-t".equals(arg)) {
+                tuiMode = true;
+                break;
+            } else if ("--help".equals(arg) || "-h".equals(arg)) {
+                printHelp();
+                return;
+            }
+        }
+        
         Settings.loadSettings();
         try {
             new Thread(ActiveControllerManager.getInstance(), "ActiveControllerManager").start();
@@ -43,14 +57,35 @@ public final class Main {
             e.printStackTrace();
             fatal();
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GuiMain.getInstance();
+        
+        if (tuiMode) {
+            // Run in TUI mode
+            TuiMain tuiMain = TuiMain.getInstance();
+            MessageBoxManager.addMessageBoxListener(tuiMain);
+            tuiMain.start();
+        } else {
+            // Run in GUI mode
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    GuiMain.getInstance();
 
-            }
-        });
+                }
+            });
 
-        MessageBoxManager.addMessageBoxListener(GuiMain.getInstance());
+            MessageBoxManager.addMessageBoxListener(GuiMain.getInstance());
+        }
+    }
+    
+    private static void printHelp() {
+        System.out.println("HID To VPAD Network Client");
+        System.out.println();
+        System.out.println("Usage: java -jar HIDToVPADNetworkClient.jar [OPTIONS]");
+        System.out.println();
+        System.out.println("Options:");
+        System.out.println("  --tui, -t, --no-gui    Run in text-based user interface mode (no GUI)");
+        System.out.println("  --help, -h             Show this help message");
+        System.out.println();
+        System.out.println("If no options are specified, the application runs in GUI mode.");
     }
 
     private Main() {

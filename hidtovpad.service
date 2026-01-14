@@ -1,0 +1,22 @@
+[Unit]
+Description=HID To VPAD Network Client (TUI Mode)
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/path/to/HIDtoVPADNetworkClient
+ExecStart=/usr/bin/java -jar /path/to/HIDtoVPADNetworkClient.jar --tui
+Restart=on-failure
+RestartSec=10
+
+# Optional: Set environment variables if needed
+# Environment="JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hidtovpad
+
+[Install]
+WantedBy=multi-user.target
