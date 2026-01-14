@@ -33,6 +33,30 @@ New command-line options useful for TUI/headless use:
 
 See [TUI_USAGE.md](TUI_USAGE.md) for detailed information about using the text-based interface.
 
+Headless (no-menu) mode
+-----------------------
+If you want the client to run without showing the interactive menu (good for daemons, systemd services or SSH sessions where no input is available), use the `--headless` flag together with `--tui`:
+
+```bash
+java -jar HIDToVPADNetworkClient.jar --tui --headless
+```
+
+Common combinations:
+
+- Auto-connect and run headless:
+```bash
+java -jar HIDToVPADNetworkClient.jar --tui --headless --auto-connect
+```
+- Headless with debug messages:
+```bash
+java -jar HIDToVPADNetworkClient.jar --tui --headless --debug
+```
+
+Systemd / service notes:
+- When running as a systemd service run the JAR with `--tui --headless` so it doesn't expect interactive input.
+- The included `nixos/hidtovpad-module.nix` (if you're on NixOS) can be adjusted to include `--headless` in `ExecStart`.
+
+
 ## Used Libraries
 Lombok - https://projectlombok.org/index.html  
 purejavahidapi - https://github.com/nyholku/purejavahidapi  

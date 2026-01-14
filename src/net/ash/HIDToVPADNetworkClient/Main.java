@@ -42,6 +42,7 @@ public final class Main {
     private static boolean tuiMode = false;
     private static boolean debugMode = false;
     private static boolean autoConnect = false;
+    private static boolean headlessMode = false;
     
     public static void main(String[] args) {
         // Check for TUI and debug mode arguments
@@ -54,6 +55,9 @@ public final class Main {
             } else if ("--debug".equals(arg) || "--tui-debug".equals(arg) || "-d".equals(arg)) {
                 debugMode = true;
                 net.ash.HIDToVPADNetworkClient.util.Settings.DEBUG_TUI = true;
+            } else if ("--headless".equals(arg) || "--daemon".equals(arg) || "--no-menu".equals(arg)) {
+                headlessMode = true;
+                net.ash.HIDToVPADNetworkClient.util.Settings.HEADLESS_TUI = true;
             } else if ("--auto-connect".equals(arg) || "--autoconnect".equals(arg) || "-a".equals(arg)) {
                 autoConnect = true;
             }
@@ -105,7 +109,11 @@ public final class Main {
                     tuiMain.showMessageBox(new MessageBox("Auto-connect: Failed to connect to " + Settings.getIpAddr(), MessageBox.MESSAGE_WARNING));
                 }
             }
-            tuiMain.start();
+            if (headlessMode) {
+                tuiMain.startHeadless();
+            } else {
+                tuiMain.start();
+            }
         } else {
             // Run in GUI mode
             SwingUtilities.invokeLater(new Runnable() {

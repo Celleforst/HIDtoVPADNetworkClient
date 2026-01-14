@@ -54,6 +54,7 @@ public final class Settings {
     public static boolean DEBUG_UDP_OUTPUT = false;
     public static boolean DEBUG_TCP_PING_PONG = false;
     public static boolean DEBUG_TUI = false;
+    public static boolean HEADLESS_TUI = false;
     public static boolean SEND_DATA_ONLY_ON_CHANGE = false;
     public static boolean AUTO_ACTIVATE_CONTROLLER = false;
 

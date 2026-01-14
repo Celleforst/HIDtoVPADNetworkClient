@@ -72,6 +72,39 @@ public class TuiMain implements MessageBoxListener {
         inputThread.start();
     }
 
+    /**
+     * Start the TUI in headless mode: do not show any menu or prompt, just run
+     * the background managers and wait until shutdown. Useful for systemd.
+     */
+    public void startHeadless() {
+        // Do not print the welcome or menu
+        running = true;
+
+        // Install a shutdown hook so we can perform a clean disconnect
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            running = false;
+            try {
+                NetworkManager.getInstance().disconnect();
+            } catch (Exception e) {
+                log.warning("Error during shutdown disconnect: " + e.getMessage());
+            }
+        }, "TUI-Headless-Shutdown"));
+
+        // In headless mode, periodically wake up to allow MessageBox notifications
+        // to be handled and to keep main thread alive.
+        while (running) {
+            try {
+                // Optionally perform periodic tasks here (e.g., auto-scan controllers)
+                if (Settings.SCAN_AUTOMATICALLY_FOR_CONTROLLERS) {
+                    ControllerManager.detectControllers();
+                }
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // continue loop until running is false
+            }
+        }
+    }
+
     private void printWelcome() {
         System.out.println("=====================================");
         System.out.println("HID To VPAD Network Client (TUI Mode)");
