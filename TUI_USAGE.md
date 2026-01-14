@@ -60,6 +60,20 @@ To see command-line options:
 java -jar HIDToVPADNetworkClient.jar --help
 ```
 
+## Command-line flags (TUI-specific)
+
+- `--auto-connect`, `--autoconnect`, `-a`
+   - When supplied the application will attempt to connect to the IP configured in `config/hidtovpad.properties` before showing the TUI menu.
+   - The TUI waits until the connect either succeeds or fails and shows an immediate notification above the menu.
+   - The menu header will display the current `Connected: Yes/No` state after the attempt.
+
+- `--debug`, `--tui-debug`, `-d`
+   - Enables TUI debug mode. When debug is enabled you will see informational device add/remove messages and additional logging in the TUI. When disabled, the TUI keeps the terminal clean and only shows warnings/errors and the TUI notifications.
+
+Notes:
+- Device add/remove notifications are shown only in TUI debug mode to avoid cluttering the menu during normal operation.
+- If you prefer verbose logging but do not want messages on the terminal, consider redirecting output to a log file.
+
 ## Examples
 
 ### Start in TUI mode with default settings:
