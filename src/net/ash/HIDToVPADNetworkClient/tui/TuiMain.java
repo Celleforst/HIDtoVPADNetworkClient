@@ -41,6 +41,8 @@ public class TuiMain implements MessageBoxListener {
     private Scanner scanner;
     private volatile boolean running = true;
     private Thread inputThread;
+    private volatile String lastNotification = null;
+    private final Object notificationLock = new Object();
 
     private TuiMain() {
         scanner = new Scanner(System.in);
@@ -80,6 +82,14 @@ public class TuiMain implements MessageBoxListener {
     }
 
     private void printMenu() {
+        // Print last notification (if any) above the menu so it doesn't get buried
+        synchronized (notificationLock) {
+            if (lastNotification != null) {
+                System.out.println();
+                System.out.println(lastNotification);
+                lastNotification = null;
+            }
+        }
         System.out.println("\n--- Main Menu ---");
         System.out.println("1. List Controllers");
         System.out.println("2. Activate Controller");
@@ -127,6 +137,8 @@ public class TuiMain implements MessageBoxListener {
 
     private void listControllers() {
         System.out.println("\n--- Attached Controllers ---");
+        // Force a scan so hot-plugged controllers are detected immediately in TUI
+        ControllerManager.detectControllers();
         List<Controller> controllers = ControllerManager.getAttachedControllers();
         
         if (controllers.isEmpty()) {
@@ -252,6 +264,15 @@ public class TuiMain implements MessageBoxListener {
             } catch (InterruptedException e) {
                 // Ignore
             }
+            // Attempt to connect to the new IP in TUI mode as GUI does
+            boolean connected = NetworkManager.getInstance().connect(newIP);
+            synchronized (notificationLock) {
+                if (connected) {
+                    lastNotification = "[INFO] Connected to " + newIP;
+                } else {
+                    lastNotification = "[WARNING] Failed to connect to " + newIP;
+                }
+            }
         }
     }
 
@@ -264,6 +285,15 @@ public class TuiMain implements MessageBoxListener {
             // Ignore
         }
         System.out.println("Attempting to reconnect to " + Settings.getIpAddr() + "...");
+        // Attempt TCP/UDP connection to the configured IP
+        boolean connected = NetworkManager.getInstance().connect(Settings.getIpAddr());
+        synchronized (notificationLock) {
+            if (connected) {
+                lastNotification = "[INFO] Connected to " + Settings.getIpAddr();
+            } else {
+                lastNotification = "[WARNING] Failed to connect to " + Settings.getIpAddr();
+            }
+        }
     }
 
     private void toggleAutoScan() {
@@ -290,7 +320,6 @@ public class TuiMain implements MessageBoxListener {
             log.info("Can't show the message box");
             return;
         }
-        
         String prefix = "";
         switch (msg.getType()) {
             case MessageBox.MESSAGE_ERROR:
@@ -303,7 +332,8 @@ public class TuiMain implements MessageBoxListener {
                 prefix = "[INFO] ";
                 break;
         }
-        
-        System.out.println("\n" + prefix + msg.getMessage());
+        synchronized (notificationLock) {
+            lastNotification = prefix + msg.getMessage();
+        }
     }
 }

@@ -68,13 +68,17 @@ final class TCPClient {
 
     @Synchronized("lock")
     boolean abort() {
-        try {
-            shouldRetry = Settings.MAXIMUM_TRIES_FOR_RECONNECTING;
-            sock.close();
-        } catch (IOException e) {
-            log.info(e.getMessage()); // TODO: handle
-            return false;
+        shouldRetry = Settings.MAXIMUM_TRIES_FOR_RECONNECTING;
+        if (sock != null) {
+            try {
+                sock.close();
+            } catch (IOException e) {
+                log.info(e.getMessage());
+            }
         }
+        sock = null;
+        in = null;
+        out = null;
         return true;
     }
 

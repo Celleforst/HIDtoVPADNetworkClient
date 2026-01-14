@@ -91,6 +91,9 @@ public final class ControllerManager {
                 attachedControllers.get(remove).destroyAll();
                 attachedControllers.remove(remove);
                 log.info("Device removed: " + toRemove);
+                if (Settings.DEBUG_TUI) {
+                    MessageBoxManager.addMessageBox("Device removed: " + remove, MessageBox.MESSAGE_INFO);
+                }
             }
         }
 
@@ -146,6 +149,9 @@ public final class ControllerManager {
                         attachedControllers.put(deviceIdentifier, c);
                     }
                     log.info("Device added: " + deviceIdentifier);
+                    if (Settings.DEBUG_TUI) {
+                        MessageBoxManager.addMessageBox("Device added: " + deviceIdentifier, MessageBox.MESSAGE_INFO);
+                    }
                 }
             }
         }

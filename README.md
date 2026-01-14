@@ -26,6 +26,11 @@ For headless systems, SSH sessions, or if you prefer a command-line interface:
 java -jar HIDToVPADNetworkClient.jar --tui
 ```
 
+New command-line options useful for TUI/headless use:
+
+- `--auto-connect`, `--autoconnect`, `-a`: attempt to connect to the configured Wii U IP on startup and wait for the connect result before showing the TUI menu. The menu header will reflect the actual connection state.
+- `--debug`, `--tui-debug`, `-d`: enable TUI debug mode. When enabled the TUI will show informational device add/remove notifications and more verbose logging; otherwise the TUI keeps the terminal clean.
+
 See [TUI_USAGE.md](TUI_USAGE.md) for detailed information about using the text-based interface.
 
 ## Used Libraries
