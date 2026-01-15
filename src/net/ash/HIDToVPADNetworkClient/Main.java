@@ -55,6 +55,7 @@ public final class Main {
             } else if ("--debug".equals(arg) || "--tui-debug".equals(arg) || "-d".equals(arg)) {
                 debugMode = true;
                 net.ash.HIDToVPADNetworkClient.util.Settings.DEBUG_TUI = true;
+                net.ash.HIDToVPADNetworkClient.util.Settings.DEBUG_TCP_PING_PONG = true;
             } else if ("--headless".equals(arg) || "--daemon".equals(arg) || "--no-menu".equals(arg)) {
                 headlessMode = true;
                 net.ash.HIDToVPADNetworkClient.util.Settings.HEADLESS_TUI = true;
@@ -64,6 +65,8 @@ public final class Main {
         }
         
         Settings.loadSettings();
+        // Respect the user's --auto-connect flag so background checks activate
+        net.ash.HIDToVPADNetworkClient.util.Settings.AUTO_CONNECT_ON_START = autoConnect;
         // Configure logging for TUI mode: keep terminal clean unless debug enabled
         if (tuiMode) {
             Logger root = Logger.getLogger("");

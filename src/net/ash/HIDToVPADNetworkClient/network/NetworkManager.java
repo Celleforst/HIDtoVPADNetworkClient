@@ -86,7 +86,27 @@ public final class NetworkManager implements Runnable {
     }
 
     private void ping() {
-        if (isConnected() || tcpClient.isShouldRetry()) sendingCommand(new PingCommand());
+        // If already connected or TCP client is in retry state, send protocol ping
+        if (isConnected() || tcpClient.isShouldRetry()) {
+            sendingCommand(new PingCommand());
+            return;
+        }
+
+        // When not connected and auto-connect is enabled, continuously attempt to connect
+        if (!Settings.AUTO_CONNECT_ON_START) {
+            if (Settings.DEBUG_TCP_PING_PONG) log.info("Auto-connect disabled, skipping connection attempt");
+            return;
+        }
+
+        // Attempt to connect to the Wii U
+        String ip = Settings.getIpAddr();
+        if (ip == null || ip.isEmpty()) {
+            if (Settings.DEBUG_TCP_PING_PONG) log.info("No IP address configured, skipping connection attempt");
+            return;
+        }
+        
+        if (Settings.DEBUG_TCP_PING_PONG) log.info("Auto-connect: attempting to connect to " + ip + "...");
+        connect(ip);
     }
 
     private void proccessCommands() {

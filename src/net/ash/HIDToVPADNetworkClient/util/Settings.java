@@ -42,7 +42,7 @@ public final class Settings {
     public static final int MAXIMUM_TRIES_FOR_RECONNECTING = 10;
     public static final int SLEEP_AFER_POLLING = 10;
     public static final int SENDING_CMD_SLEEP_IF_NOT_CONNECTED = 500;
-    public static final int PING_INTERVAL = 1000;
+    public static final int PING_INTERVAL = 30000;
     public static final int PROCESS_CMD_INTERVAL = 10;
 
     public static final int DETECT_CONTROLLER_ACTIVE_INTERVAL = 100;
@@ -56,9 +56,13 @@ public final class Settings {
     public static boolean DEBUG_TUI = false;
     public static boolean HEADLESS_TUI = false;
     public static boolean SEND_DATA_ONLY_ON_CHANGE = false;
+    // Timeout for ICMP reachability check (used by periodic ping when not connected)
+    public static int PROBE_TIMEOUT_MS = 1000;
+    // When true, periodic reachability checks run (set by CLI --auto-connect)
+    public static boolean AUTO_CONNECT_ON_START = false;
     public static boolean AUTO_ACTIVATE_CONTROLLER = false;
 
-    @Getter @Setter private static String ipAddr = "192.168.0.35"; // @Maschell, you're welcome
+    @Getter @Setter private static String ipAddr = "192.168.0.35";
 
     private Settings() {
     }
