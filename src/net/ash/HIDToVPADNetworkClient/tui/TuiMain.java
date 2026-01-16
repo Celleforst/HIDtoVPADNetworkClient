@@ -344,6 +344,12 @@ public class TuiMain implements MessageBoxListener {
         System.out.println("\nShutting down...");
         running = false;
         scanner.close();
+        try {
+            // Give any input-handling thread a brief moment to terminate gracefully
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            // Ignore interruption during shutdown
+        }
         System.exit(0);
     }
 
