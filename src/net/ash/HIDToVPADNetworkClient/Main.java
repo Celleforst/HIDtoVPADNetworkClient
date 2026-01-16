@@ -120,6 +120,7 @@ public final class Main {
         } else {
             // Run in GUI mode
             SwingUtilities.invokeLater(new Runnable() {
+                @Override
                 public void run() {
                     GuiMain.getInstance();
 
