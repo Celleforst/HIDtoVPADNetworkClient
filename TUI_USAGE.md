@@ -63,7 +63,7 @@ java -jar HIDToVPADNetworkClient.jar --help
 ## Command-line flags (TUI-specific)
 
 - `--auto-connect`, `--autoconnect`, `-a`
-   - When supplied the application will attempt to connect to the IP configured in `config/hidtovpad.properties` before showing the TUI menu an continuously thereafter every 30 seconds.
+   - When supplied the application will attempt to connect to the IP configured in `config/hidtovpad.properties` before showing the TUI menu and continuously thereafter every 30 seconds.
 
 - `--debug`, `--tui-debug`, `-d`
    - Enables TUI debug mode. When debug is enabled you will see informational device add/remove messages and additional logging in the TUI. When disabled, the TUI keeps the terminal clean and only shows warnings/errors and the TUI notifications.
