@@ -139,10 +139,11 @@ public final class Main {
         System.out.println("Usage: java -jar HIDToVPADNetworkClient.jar [OPTIONS]");
         System.out.println();
         System.out.println("Options:");
-        System.out.println("  --tui, -t, --no-gui    Run in text-based user interface mode (no GUI)");
-        System.out.println("  --auto-connect, -a     Attempt to connect to configured IP before showing TUI menu");
-        System.out.println("  --debug, -d            Enable TUI debug messages (device add/remove notifications)");
-        System.out.println("  --help, -h             Show this help message");
+        System.out.println("  --tui, -t, --no-gui               Run in text-based user interface mode (no GUI)");
+        System.out.println("  --auto-connect, -a                Attempt to connect to configured IP before showing TUI menu");
+        System.out.println("  --debug, -d                       Enable TUI debug messages (device add/remove notifications)");
+        System.out.println("  --headless, --daemon, --no-menu   Run TUI in headless mode (no menu displayed)");
+        System.out.println("  --help, -h                        Show this help message");
         System.out.println();
         System.out.println("If no options are specified, the application runs in GUI mode.");
     }
