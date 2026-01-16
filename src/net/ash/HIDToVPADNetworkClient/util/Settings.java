@@ -48,6 +48,9 @@ public final class Settings {
     public static final int DETECT_CONTROLLER_ACTIVE_INTERVAL = 100;
 
     public static final int RUMBLE_STRENGTH = 50; // in % TODO: Create setting for this.
+    
+    // Delay (in ms) after device attach before sending input data to prevent initial input flooding
+    public static final int CONTROLLER_INIT_DELAY_MS = 1000;
 
     public static boolean SCAN_AUTOMATICALLY_FOR_CONTROLLERS = true;
 

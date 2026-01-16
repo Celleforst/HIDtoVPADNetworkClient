@@ -44,6 +44,8 @@ public class NetworkHIDDevice {
     @Getter @Setter private boolean needFirstData = false;
 
     private byte[] lastdata = null;
+    
+    private long attachedTimestamp = 0;
 
     @Getter private final int hidHandle = HandleFoundry.next();
 
@@ -68,6 +70,7 @@ public class NetworkHIDDevice {
     }
 
     public void sendAttach() {
+        attachedTimestamp = System.currentTimeMillis();
         addCommand(new AttachCommand(getHidHandle(), getVid(), getPid(), this));
     }
 
@@ -76,6 +79,15 @@ public class NetworkHIDDevice {
     }
 
     public void sendRead(byte[] data) {
+        // Skip sending data during initialization period to prevent input flooding
+        if (attachedTimestamp > 0) {
+            long timeSinceAttach = System.currentTimeMillis() - attachedTimestamp;
+            if (timeSinceAttach < Settings.CONTROLLER_INIT_DELAY_MS) {
+                // Still in initialization period, skip this data
+                return;
+            }
+        }
+        
         if (!Settings.SEND_DATA_ONLY_ON_CHANGE || !Arrays.equals(lastdata, data) && Settings.SEND_DATA_ONLY_ON_CHANGE || isNeedFirstData()) {
             synchronized (readCommandLock) {
                 setLatestRead(new ReadCommand(getHidHandle(), data, this)); // Only get the latest Value.
